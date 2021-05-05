@@ -6,15 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 namespace PaySystemBL
 {
-    public class DbConnection
+    public static class DbConnection
     {
         //Продумать какие поля должны быть статическими
         public static SqlConnection connection;
         public static SqlCommand cmd;
-        public DbConnection()
+         static DbConnection()
         {
             connection = new SqlConnection();
-            connection.ConnectionString = @"Data Source=GEORGY-PC\SQLEXPRESS;Initial Catalog=wfApp;Integrated Security=True";
+            connection.ConnectionString = @"Data Source=PaySystem1.mssql.somee.com;Initial Catalog=PaySystem1;Persist Security Info=True;User ID=logo3112_SQLLogin_1;Password=fdzdhkgze7";
             cmd = new SqlCommand();
             cmd.Connection = connection;
         }

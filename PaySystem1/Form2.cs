@@ -15,7 +15,7 @@ namespace PaySystem1
     public partial class Form2 : Form
     {
         //Что бы не подключать кучу пространств имён, надо сделать что то типо сервайса, через который будет доступ к методам (наверное)
-        DefaultCommands commands = new DefaultCommands();
+        Authentication commands = new Authentication();
         Balance balance = new Balance();
         Orders orders = new Orders();
         Pays pays = new Pays();
@@ -120,5 +120,6 @@ namespace PaySystem1
             }
             balanceSumm = 0;orderPrice = 0;
         }
+
     }
 }

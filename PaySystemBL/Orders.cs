@@ -10,7 +10,7 @@ namespace PaySystemBL
 {
     public class Orders
     {
-        SqlCommand cmd = DbConnection.GetSqlCommand();
+        readonly SqlCommand cmd = DbConnection.GetSqlCommand();
         public DataTable GetOrderItems()
         {
             cmd.Parameters.AddWithValue("@usId", User.Id);
@@ -25,13 +25,13 @@ namespace PaySystemBL
                 DbConnection.Close();
                 return table;
              }
-             catch (Exception)
+             catch (Exception e)
              {
                  DbConnection.Close();
-        
-                 throw;
-             }
-             
+
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }

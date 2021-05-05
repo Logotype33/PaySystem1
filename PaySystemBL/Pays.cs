@@ -10,7 +10,7 @@ namespace PaySystemBL
 {
     public class Pays
     {
-        SqlCommand cmd = DbConnection.GetSqlCommand();
+        readonly SqlCommand cmd = DbConnection.GetSqlCommand();
         public void PayOrder(List<int> orderItemsId,List<int> idOfScores)
         {
             SqlTransaction trans = null;
@@ -70,10 +70,10 @@ namespace PaySystemBL
                
                 DbConnection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
-                throw;
+                throw new Exception(e.Message);
             }
         }
     }

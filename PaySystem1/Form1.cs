@@ -14,8 +14,7 @@ namespace PaySystem1
 {
     public partial class Form1 : Form
     {
-        DbConnection db = new DbConnection();
-        DefaultCommands commands = new DefaultCommands();
+        Authentication commands = new Authentication();
         public Form1()
         {
             InitializeComponent();
@@ -37,8 +36,7 @@ namespace PaySystem1
         {
             DbConnection.Close();
         }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click_1(object sender, EventArgs e)
         {
             commands.Register(textBox1.Text, textBox2.Text);
             if (commands.isRegistred)
@@ -49,6 +47,7 @@ namespace PaySystem1
             {
                 MessageBox.Show("Not Registred");
             }
+
         }
     }
 }

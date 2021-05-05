@@ -10,8 +10,7 @@ namespace PaySystemBL
 {
     public class Balance
     {
-        SqlCommand cmd=DbConnection.GetSqlCommand();
-        UnitOfScore score = new UnitOfScore();
+        readonly SqlCommand cmd=DbConnection.GetSqlCommand();
         double balance =0;
 
         public Balance()
@@ -36,11 +35,11 @@ namespace PaySystemBL
                 cmd.Parameters.Clear();
                 return balance;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
 
-                throw;
+                throw new Exception(e.Message);
             }
         }
         public DataTable ShowUnitOfScore()
@@ -58,11 +57,11 @@ namespace PaySystemBL
                 DbConnection.Close();
                 return table;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
 
-                throw;
+                throw new Exception(e.Message);
             }
         }
         public void CreateNewBalance()
@@ -75,10 +74,10 @@ namespace PaySystemBL
                 cmd.ExecuteNonQuery();
                 DbConnection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
-                throw;
+                throw new Exception(e.Message);
             }
 
         }
@@ -95,10 +94,10 @@ namespace PaySystemBL
                 cmd.Parameters.Clear();
                 DbConnection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
-                throw;
+                throw new Exception(e.Message);
             }
         }
     }

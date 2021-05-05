@@ -8,16 +8,10 @@ using System.Threading.Tasks;
 namespace PaySystemBL
 {
     //TODO: rename and split this
-    public class DefaultCommands
+    public class Authentication
     {
-        SqlCommand cmd;
-        Balance balance = new Balance();
+        readonly SqlCommand cmd = DbConnection.GetSqlCommand();
         public bool isRegistred=false;
-        public DefaultCommands()
-        {
-            cmd = DbConnection.GetSqlCommand();
-
-        }
         public void Login(string login,string password)
         {
                 cmd.Parameters.AddWithValue("@login", login);
@@ -37,10 +31,10 @@ namespace PaySystemBL
                 cmd.Parameters.Clear();
                 DbConnection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
-                throw;
+                throw new Exception(e.Message);
             }
             finally
             {
@@ -51,7 +45,6 @@ namespace PaySystemBL
 
         public void Register(string login, string password)
         {
-            
             cmd.Parameters.AddWithValue("@login", login);
             cmd.Parameters.AddWithValue("@password", password);
             try
@@ -72,11 +65,11 @@ namespace PaySystemBL
                     cmd.Parameters.Clear();
                     DbConnection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DbConnection.Close();
 
-                throw;
+                throw new Exception(e.Message);
             }
         }
     }
