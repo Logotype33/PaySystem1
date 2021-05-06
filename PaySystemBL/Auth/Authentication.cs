@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaySystemBL.Auth;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -7,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace PaySystemBL
 {
-    //TODO: rename and split this
-    public class Authentication
+    public class Authentication: IAuthentication
     {
-        readonly SqlCommand cmd = DbConnection.GetSqlCommand();
-        public bool isRegistred=false;
+        readonly SqlCommand cmd = DbConnection.cmd;
+        
+
+        private bool isRegistred=false;
+        public bool IsRegistred()
+        {
+            return isRegistred;
+        }
         public void Login(string login,string password)
         {
                 cmd.Parameters.AddWithValue("@login", login);

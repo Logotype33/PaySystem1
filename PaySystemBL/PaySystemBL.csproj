@@ -41,12 +41,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Balance.cs" />
+    <Compile Include="Auth\IAuthentication.cs" />
+    <Compile Include="BalanceFolder\Balance.cs" />
+    <Compile Include="BalanceFolder\ChangeBalance\CreateBalance.cs" />
+    <Compile Include="BalanceFolder\ChangeBalance\ICreateBalance.cs" />
+    <Compile Include="BalanceFolder\Get\GetBalance.cs" />
+    <Compile Include="BalanceFolder\Get\IGetBalance.cs" />
+    <Compile Include="BalanceFolder\IBalance.cs" />
     <Compile Include="DbConnection.cs" />
-    <Compile Include="Authentication.cs" />
-    <Compile Include="Orders.cs" />
-    <Compile Include="Pays.cs" />
+    <Compile Include="Auth\Authentication.cs" />
+    <Compile Include="Orders\GetOrders\GetOrder.cs" />
+    <Compile Include="Orders\GetOrders\IGetOrder.cs" />
+    <Compile Include="Orders\IOrder.cs" />
+    <Compile Include="Orders\Order.cs" />
+    <Compile Include="Pays\IPay.cs" />
+    <Compile Include="Pays\Pay.cs" />
+    <Compile Include="Pays\PaysInfo\PayInfo.cs" />
+    <Compile Include="Pays\PaysInfo\IPayInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\PayService.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

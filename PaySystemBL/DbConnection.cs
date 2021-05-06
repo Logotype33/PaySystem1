@@ -33,13 +33,5 @@ namespace PaySystemBL
             if (connection.State == System.Data.ConnectionState.Open)
                 connection.Close();
         }
-        public static SqlConnection GetConnectionString()
-        {
-            return connection;
-        }
-        public static SqlCommand GetSqlCommand()
-        {
-            return cmd;
-        }
     }
 }

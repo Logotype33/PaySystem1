@@ -1,4 +1,5 @@
 ﻿using PaySystemBL;
+using PaySystemBL.Auth;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace PaySystem1
 {
     public partial class Form1 : Form
     {
-        Authentication commands = new Authentication();
+        readonly IAuthentication authentication = new Authentication();
         public Form1()
         {
             InitializeComponent();
@@ -22,7 +23,7 @@ namespace PaySystem1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            commands.Login(textBox1.Text, textBox2.Text);
+            authentication.Login(textBox1.Text, textBox2.Text);
             if (User.IsAuthorized)
             {
                 this.Close();
@@ -38,8 +39,8 @@ namespace PaySystem1
         }
         private void button3_Click_1(object sender, EventArgs e)
         {
-            commands.Register(textBox1.Text, textBox2.Text);
-            if (commands.isRegistred)
+            authentication.Register(textBox1.Text, textBox2.Text);
+            if (authentication.IsRegistred())
             {
                 MessageBox.Show("Registred");
             }

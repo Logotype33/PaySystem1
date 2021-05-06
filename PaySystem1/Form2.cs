@@ -1,4 +1,8 @@
-﻿using PaySystemBL;
+﻿
+using PaySystemBL;
+using PaySystemBL.Pays;
+using PaySystemBL.Pays.PaysInfo;
+using PaySystemBL.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,26 +18,22 @@ namespace PaySystem1
 {
     public partial class Form2 : Form
     {
-        //Что бы не подключать кучу пространств имён, надо сделать что то типо сервайса, через который будет доступ к методам (наверное)
-        Authentication commands = new Authentication();
-        Balance balance = new Balance();
-        Orders orders = new Orders();
-        Pays pays = new Pays();
-        DataTable dt;
+        readonly PayService payService = new PayService();
         float orderPrice = 0;
         float balanceSumm = 0;
         private string status = null;
-        List<int> OrdersItemId = new List<int>();
-        List<int> ScoresId = new List<int>();
+        private readonly List<int> OrdersItemId = new List<int>();
+        private readonly List<int> ScoresId = new List<int>();
         public Form2()
         {
             InitializeComponent();
+            
             LoadScores();
             LoadOrders();
         }
         public void LoadOrders()
         {
-            var dt = orders.GetOrderItems();
+            var dt = payService.Order.GetOrder.GetTableOfOrderItems();
             listView1.Items.Clear();
             foreach (DataRow dr in dt.Rows)
             {
@@ -51,8 +51,8 @@ namespace PaySystem1
         }
         public void LoadScores()
         {
-            balance = new Balance();
-            dt = balance.ShowUnitOfScore();
+            payService.BalanceReset();
+            var dt = payService.Balance.GetBalance.GetTableOfScore();
             listView2.Items.Clear();
             foreach (DataRow dr in dt.Rows)
             {
@@ -60,15 +60,14 @@ namespace PaySystem1
                 lvi.SubItems.Add(Convert.ToString(dr["Balance_sum"]));
                 listView2.Items.Add(lvi);
             }
-            textBox1.Text = balance.ShowTotalBalance().ToString();
+            textBox1.Text = payService.Balance.GetBalance.GetTotalBalance().ToString();
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            float num;
-            bool isNum = float.TryParse(textBox3.Text, out num);
+            bool isNum = float.TryParse(textBox3.Text, out float num);
             if (isNum)
             {
-                balance.CreateNewScore(num);
+                payService.Balance.CreateBalance.CreateNewScore(num);
                 LoadScores();
             }
             else
@@ -105,7 +104,9 @@ namespace PaySystem1
                 if (balanceSumm >= orderPrice)
                 {
                     MessageBox.Show("Можно оплатить");
-                    pays.PayOrder(OrdersItemId, ScoresId);
+
+                    payService.Pay = new Pay(new PayInfo(User.Id, OrdersItemId,ScoresId));
+                    payService.Pay.Pay();
                     LoadScores();
                     LoadOrders();
                 }
