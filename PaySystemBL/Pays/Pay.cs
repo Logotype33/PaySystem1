@@ -16,12 +16,17 @@ namespace PaySystemBL.Pays
         {
             _info = info;
         }
+        
         void IPay.Pay()
         {
             try
             {
-                DbConnection.cmd.Parameters.Clear();
                 DbConnection.Open();
+                SqlTransaction trans = DbConnection.connection.BeginTransaction();
+                DbConnection.cmd.Transaction = trans;
+                DbConnection.cmd.Parameters.Clear();
+                int res = 0;
+                SqlParameter returnValue;
                 foreach (var orderItem in _info.GetPayItemId())
                 {
                     Guid guid = Guid.NewGuid();
@@ -35,12 +40,38 @@ namespace PaySystemBL.Pays
                         DbConnection.cmd.CommandText = "insert into pays (sum_of_pay,user_id,product_id,payer_score_id,transaction_id) values(" +
                             "(select balance_sum from unitofscore where id=@idOfScore),@usId,@orderItemId,@idOfScore,@transactionId)";
                         DbConnection.cmd.ExecuteNonQuery();
+                        
                     }
+                    DbConnection.cmd.CommandType = CommandType.StoredProcedure;
+                    DbConnection.cmd.CommandText = "CheckPayedSum";
+                    DbConnection.cmd.Parameters.Clear();
+                    DbConnection.cmd.Parameters.AddWithValue("@transactionId", guid);
+                    DbConnection.cmd.Parameters.AddWithValue("@orderItemId", orderItem);
+                    returnValue = DbConnection.cmd.Parameters.AddWithValue("@Return", SqlDbType.Int);
+                    returnValue.Direction = ParameterDirection.ReturnValue;
+                    DbConnection.cmd.ExecuteNonQuery();
+                    res = Convert.ToInt32(returnValue.Value);
+                    DbConnection.cmd.CommandType = CommandType.Text;
+                    if (res == 0)
+                    {
+                        trans.Rollback();
+                        return;
+                    }
+
                     DbConnection.cmd.Parameters.Clear();
                     DbConnection.cmd.Parameters.AddWithValue("@orderItemId", orderItem);
                     DbConnection.cmd.CommandText = "update orderitem set status='payed' where id=@orderItemId";
                     DbConnection.cmd.ExecuteNonQuery();
                 }
+                if (res == 0)
+                {
+                    trans.Rollback();
+                }
+                else if (res == 1)
+                {
+                    trans.Commit();
+                }
+                DbConnection.cmd.Parameters.Clear();
                 DbConnection.Close();
             }
             catch (Exception e)
